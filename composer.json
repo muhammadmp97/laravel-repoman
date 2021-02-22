@@ -1,0 +1,16 @@
+{
+    "name": "webpajooh/laravel-repoman",
+    "description": "",
+    "authors": [
+        {
+            "name": "WebPajooh",
+            "email": "webpajooh@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "WebPajooh\\LaravelRepoMan\\": "src/"
+        }
+    }
+}
