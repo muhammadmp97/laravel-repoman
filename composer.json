@@ -1,16 +1,26 @@
 {
     "name": "webpajooh/laravel-repoman",
     "description": "",
+    "keywords": ["laravel", "tools", "repo-man"],
+    "license": "MIT",
+    "homepage": "https://github.com/WebPajooh/laravel-repoman",
     "authors": [
         {
             "name": "WebPajooh",
             "email": "webpajooh@gmail.com"
         }
     ],
-    "require": {},
+    "required": {},
     "autoload": {
         "psr-4": {
-            "WebPajooh\\Repoman\\": "src/"
+            "WebPajooh\\LaravelRepoman\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WebPajooh\\LaravelRepoMan\\ServiceProvider"
+            ]
         }
     }
 }
