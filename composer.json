@@ -1,7 +1,7 @@
 {
     "name": "webpajooh/laravel-repoman",
-    "description": "",
-    "keywords": ["laravel", "tools", "repo-man"],
+    "description": "Set a payment deadline for the customer",
+    "keywords": ["laravel", "tools", "package", "repo-man"],
     "license": "MIT",
     "homepage": "https://github.com/WebPajooh/laravel-repoman",
     "authors": [
