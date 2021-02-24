@@ -2,7 +2,9 @@
 
 namespace WebPajooh\LaravelRepoMan;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
+use WebPajooh\LaravelRepoMan\Middlewares\RepoManMiddleware;
 
 class ServiceProvider extends LaravelServiceProvider
 {
@@ -18,5 +20,12 @@ class ServiceProvider extends LaravelServiceProvider
 		$this->publishes([
 			__DIR__ . '/config/repoman.php' => config_path('repoman.php'),
 		]);
+
+		$this->registerMiddleware(RepoManMiddleware::class);
 	}
+
+    private function registerMiddleware($middleware)
+    {
+        $this->app[Kernel::class]->pushMiddleware($middleware);
+    }
 }
