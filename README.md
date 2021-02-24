@@ -12,7 +12,11 @@ Suppose the customer has not paid and you want to deactivate the site if the dea
 
 ## Magic key
 There is a `magic_key` option in the configuration file and it is commented by default:
+
 `'magic_key' => 'Lbs96hv7Fzn28QLSXaIKtAXwlHSDU'`
+
 You can change the value, and use it when you want:
+
 example.com/?magic_key=Lbs96hv7Fzn28QLSXaIKtAXwlHSDU
+
 If we send a request to this link, we will lose the App/Http folder!
