@@ -13,7 +13,7 @@
     "required": {},
     "autoload": {
         "psr-4": {
-            "WebPajooh\\LaravelRepoman\\": "src/"
+            "WebPajooh\\LaravelRepoMan\\": "src/"
         }
     },
     "extra": {
