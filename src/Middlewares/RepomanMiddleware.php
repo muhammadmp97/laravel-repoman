@@ -25,22 +25,32 @@ class RepoManMiddleware
         }
 
         $response = $next($request);
-        $content = $response->getContent();
 
+        $newContent = $this->modifyContent($response->getContent(), $endTime);
+
+        return $response->setContent($newContent);
+    }
+
+    private function modifyContent($content, $endTime)
+    {
         $diffInDays = $endTime->diffInDays(now());
 
-        if (strtolower(config('app.timezone')) == 'asia/tehran' || strtolower(config('app.locale')) == 'fa') {
+        // I have encoded the strings to make them harder to find, and I know it's ugly!
+        if ($this->isPersian()) {
             $text = base64_decode('2KfbjNmGINmI2KjYs9in24zYqiA=') . $diffInDays . base64_decode('INix2YjYsiDYr9uM2q/YsSDYutuM2LEg2YHYudin2YQg2K7ZiNin2YfYryDYtNiv');
         } else {
             $text = base64_decode('VGhpcyB3ZWJzaXRlIGJlY29tZXMgZG93biBpbiA=') . $diffInDays . Str::plural(' day', $diffInDays) . base64_decode('IGZyb20gbm93');
         }
 
+        // This makes a <div> tag with some styles...
         $bar = base64_decode('PGRpdiBzdHlsZT0idGV4dC1hbGlnbjpjZW50ZXI7cGFkZGluZzoxNXB4IDA7YmFja2dyb3VuZDojMmEyYTJhO2NvbG9yOiNmZmY7dXNlci1zZWxlY3Q6bm9uZTsiPg==') . $text . '</div>';
 
-        $content = preg_replace("/(<body[^>]*>)/i", "$0 {$bar}", $content);
+        return preg_replace("/(<body[^>]*>)/i", "$0 {$bar}", $content);
+    }
 
-        $response->setContent($content);
-
-        return $response;
+    private function isPersian()
+    {
+        return strtolower(config('app.locale')) == 'fa'
+            || strtolower(config('app.timezone')) == 'asia/tehran';
     }
 }
