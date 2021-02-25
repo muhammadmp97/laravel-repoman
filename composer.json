@@ -10,7 +10,10 @@
             "email": "webpajooh@gmail.com"
         }
     ],
-    "required": {},
+    "require": {
+        "php": ">=7.0.0",
+        "laravel/framework":"6.*|7.*|8.*|9.*"
+    },
     "autoload": {
         "psr-4": {
             "WebPajooh\\LaravelRepoMan\\": "src/"
