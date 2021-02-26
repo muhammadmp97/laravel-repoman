@@ -1,6 +1,6 @@
 <?php
 
-namespace WebPajooh\LaravelRepoman\Middlewares;
+namespace WebPajooh\LaravelRepoMan\Middleware;
 
 use Carbon\Carbon;
 use Closure;
