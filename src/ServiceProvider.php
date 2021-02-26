@@ -4,7 +4,7 @@ namespace WebPajooh\LaravelRepoMan;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
-use WebPajooh\LaravelRepoMan\Middlewares\RepoManMiddleware;
+use WebPajooh\LaravelRepoMan\Middleware\RepoManMiddleware;
 
 class ServiceProvider extends LaravelServiceProvider
 {
