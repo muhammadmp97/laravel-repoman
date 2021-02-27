@@ -8,11 +8,6 @@ use WebPajooh\LaravelRepoMan\Middleware\RepoManMiddleware;
 
 class ServiceProvider extends LaravelServiceProvider
 {
-	public function register()
-	{
-		//
-	}
-
 	public function boot()
 	{
 		$this->mergeConfigFrom( __DIR__ . '/config/repoman.php', 'repoman');

